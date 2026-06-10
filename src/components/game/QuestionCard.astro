@@ -1,0 +1,21 @@
+---
+import AnswerCard from './AnswerCard.astro';
+interface Question { question: string; image?: string; choices: (string | number)[]; answer: string | number; explanation: string; fun_fact?: string; }
+interface Props { question: Question; number: number; total: number; explanationHref: string; }
+const { question, number, total, explanationHref } = Astro.props;
+---
+<section class="comic-card bg-white p-5 md:p-8" aria-labelledby={`question-${number}`}>
+  <div class="mb-5 flex flex-wrap items-center justify-between gap-3"><p class="sticker">Mission {number}/{total}</p><p class="sticker">🪙 +10 coins · ⭐ streak</p></div>
+  <div class="grid gap-6 md:grid-cols-[.85fr_1.15fr]">
+    <div class="grid min-h-56 place-items-center rounded-[2rem] border-5 border-ink bg-skybolt p-6 text-center text-7xl" aria-label="Question illustration">{question.image ? <img src={question.image} alt="Comic quiz clue" class="max-h-52 rounded-2xl" loading="lazy" /> : '🧩'}</div>
+    <div>
+      <h2 id={`question-${number}`} class="text-3xl font-black md:text-5xl">{question.question}</h2>
+      <div class="mt-6 grid gap-4">{question.choices.map((choice, index) => <AnswerCard choice={choice} index={index} correct={choice === question.answer} />)}</div>
+    </div>
+  </div>
+  <div id="answer-feedback" class="mt-6 rounded-3xl border-3 border-ink bg-mintpop p-5 shadow-brut-sm">
+    <h3 class="text-2xl font-black">Tap reveal: Correct answer is {question.answer}! 🎉</h3>
+    <p class="mt-2 text-lg font-bold">{question.explanation}</p>
+    <a class="comic-button mt-4" href={explanationHref}>Read full explanation</a>
+  </div>
+</section>

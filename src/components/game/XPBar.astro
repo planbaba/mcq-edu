@@ -1,0 +1,6 @@
+---
+interface Props { xp: number; max?: number; }
+const { xp, max = 100 } = Astro.props;
+const pct = Math.min(100, Math.round((xp / max) * 100));
+---
+<div class="comic-card bg-white p-4"><div class="mb-2 flex justify-between font-black"><span>XP Meter</span><span>{xp}/{max}</span></div><div class="h-5 rounded-full border-3 border-ink bg-paper"><div class="h-full rounded-full bg-limezap" style={`width:${pct}%`}></div></div></div>

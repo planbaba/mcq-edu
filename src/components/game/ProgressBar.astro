@@ -1,0 +1,6 @@
+---
+interface Props { current: number; total: number; }
+const { current, total } = Astro.props;
+const pct = Math.round((current / total) * 100);
+---
+<div class="comic-card bg-skybolt p-4"><div class="mb-2 font-black">Question {current} of {total}</div><div class="h-5 rounded-full border-3 border-ink bg-white"><div class="h-full rounded-full bg-sunshine" style={`width:${pct}%`}></div></div></div>

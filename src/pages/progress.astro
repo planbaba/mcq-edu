@@ -1,0 +1,12 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+import StatsCard from '../components/dashboard/StatsCard.astro';
+import AchievementBadge from '../components/dashboard/AchievementBadge.astro';
+import { progressStats, subjectProgress } from '../data/progress';
+import { achievements } from '../data/achievements';
+---
+<DashboardLayout title="Progress Dashboard" kicker="Your Learning Power">
+  <section class="grid gap-5 md:grid-cols-4">{progressStats.map((s) => <StatsCard {...s} />)}</section>
+  <section class="mt-10 grid gap-6 lg:grid-cols-[1.2fr_.8fr]"><div class="comic-card bg-white p-6"><h2 class="text-3xl font-black">Subject Completion</h2><div class="mt-5 grid gap-4">{subjectProgress.map((s) => <div><div class="mb-1 flex justify-between font-black"><span>{s.subject}</span><span>{s.percent}%</span></div><div class="h-5 rounded-full border-3 border-ink bg-paper"><div class="h-full rounded-full bg-limezap" style={`width:${s.percent}%`}></div></div></div>)}</div></div><div class="comic-card bg-lava p-6"><h2 class="text-3xl font-black">Learning Streak</h2><p class="mt-4 text-6xl font-black">🔥 7 days</p><p class="mt-2 text-xl font-bold">Keep going to unlock a rare badge!</p></div></section>
+  <section class="mt-10"><h2 class="mb-5 text-3xl font-black">Achievement Badges</h2><div class="grid gap-5 md:grid-cols-3">{achievements.map((a) => <AchievementBadge {...a} />)}</div></section>
+</DashboardLayout>

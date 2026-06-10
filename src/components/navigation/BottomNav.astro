@@ -1,0 +1,8 @@
+---
+const items = [['🏠','Home','/'],['📚','Subjects','/#subjects'],['🗺️','Map','/map'],['🏆','Ranks','/leaderboard'],['📈','Progress','/progress']];
+---
+<nav class="fixed inset-x-3 bottom-3 z-50 rounded-[1.5rem] border-5 border-ink bg-white p-2 shadow-brut md:inset-x-10 lg:hidden" aria-label="Tablet bottom navigation">
+  <div class="grid grid-cols-5 gap-1">
+    {items.map(([icon,label,href]) => <a href={href} class="grid min-h-16 place-items-center rounded-2xl text-center text-xs font-black hover:bg-sunshine"><span class="text-2xl" aria-hidden="true">{icon}</span>{label}</a>)}
+  </div>
+</nav>

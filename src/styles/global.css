@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255,216,77,.45) 0 8%, transparent 8% 100%),
+    radial-gradient(circle at 90% 20%, rgba(82,199,255,.35) 0 7%, transparent 7% 100%),
+    linear-gradient(135deg, #fff9e8 0%, #eaf7ff 100%);
+  color: #111;
+  font-family: ui-rounded, "Comic Sans MS", Inter, system-ui, sans-serif;
+}
+a { color: inherit; }
+:focus-visible { outline: 4px solid #52c7ff; outline-offset: 4px; }
+.prose-comic h2 { @apply text-3xl font-black mt-8 mb-3; }
+.prose-comic h3 { @apply text-2xl font-black mt-6 mb-2; }
+.prose-comic p, .prose-comic li { @apply text-lg leading-8; }
+.prose-comic blockquote { @apply border-3 border-ink bg-sunshine rounded-3xl shadow-brut-sm px-5 py-3 font-black my-6; }
+.comic-card { @apply border-5 border-ink rounded-[2rem] shadow-brut bg-white; }
+.comic-button { @apply inline-flex min-h-12 items-center justify-center rounded-2xl border-3 border-ink bg-sunshine px-6 py-3 text-lg font-black shadow-brut-sm transition hover:-translate-y-1 hover:shadow-brut focus-visible:outline-skybolt; }
+.sticker { @apply inline-flex items-center rounded-full border-3 border-ink bg-white px-4 py-2 text-sm font-black shadow-brut-sm; }
