@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/navigation/Breadcrumbs.astro';
+import QuizCard from '../../../components/learning/QuizCard.astro';
+import NoteCard from '../../../components/learning/NoteCard.astro';
+import VideoCard from '../../../components/learning/VideoCard.astro';
+import { slugOf } from '../../../lib/utils';
+export async function getStaticPaths() { const chapters = await getCollection('chapters'); return chapters.map((c) => ({ params: { subject: c.data.subject, chapter: slugOf(c) }, props: { chapter: c } })); }
+const { chapter } = Astro.props;
+const subjects = await getCollection('subjects');
+const subject = subjects.find((s) => s.data.slug === chapter.data.subject)!;
+const quizzes = (await getCollection('quizzes')).filter((q) => q.data.chapter === slugOf(chapter));
+const notes = (await getCollection('notes')).filter((n) => n.data.chapter === slugOf(chapter));
+const videos = (await getCollection('videos')).filter((v) => v.data.chapter === slugOf(chapter));
+---
+<BaseLayout title={chapter.data.title}>
+  <Breadcrumbs items={[{label:'Home', href:'/'},{label:subject.data.title, href:`/subjects/${subject.data.slug}`},{label:chapter.data.title}]} />
+  <section class="comic-card bg-bubblegum p-6 md:p-10"><p class="sticker mb-3">Comic Chapter Intro</p><h1 class="text-5xl font-black md:text-7xl">{chapter.data.title}</h1><p class="mt-4 max-w-3xl text-xl font-bold">{chapter.data.intro}</p></section>
+  <section class="mt-8 grid gap-6 lg:grid-cols-[1fr_.9fr]"><div class="comic-card bg-white p-6"><h2 class="text-3xl font-black">Learning Objectives</h2><ul class="mt-4 grid gap-3">{chapter.data.objectives.map((o) => <li class="rounded-2xl border-3 border-ink bg-mintpop p-3 text-lg font-bold">✅ {o}</li>)}</ul></div><div class="grid gap-4">{notes.map((n)=><NoteCard title={n.data.title} slug={slugOf(n)} summary={n.data.summary} />)}{videos.map((v)=><VideoCard title={v.data.title} slug={slugOf(v)} duration={v.data.duration} />)}{quizzes.map((q)=><QuizCard title={q.data.title} slug={slugOf(q)} difficulty={q.data.difficulty} xp={q.data.xp_reward} />)}</div></section>
+</BaseLayout>

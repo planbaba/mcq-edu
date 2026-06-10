@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import GameLayout from '../../layouts/GameLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import Timer from '../../components/game/Timer.astro';
+import XPBar from '../../components/game/XPBar.astro';
+import ProgressBar from '../../components/game/ProgressBar.astro';
+import QuestionCard from '../../components/game/QuestionCard.astro';
+import AchievementPopup from '../../components/game/AchievementPopup.astro';
+import { slugOf } from '../../lib/utils';
+export async function getStaticPaths() { const quizzes = await getCollection('quizzes'); return quizzes.map((q) => ({ params: { slug: slugOf(q) }, props: { quiz: q } })); }
+const { quiz } = Astro.props;
+const first = quiz.data.questions[0];
+---
+<GameLayout title={quiz.data.title}>
+  <Breadcrumbs items={[{label:'Home', href:'/'},{label:quiz.data.subject, href:`/subjects/${quiz.data.subject}`},{label:quiz.data.chapter, href:`/subjects/${quiz.data.subject}/${quiz.data.chapter}`},{label:'Quiz'}]} />
+  <div class="mb-5 grid gap-4 md:grid-cols-3"><Timer seconds={quiz.data.time_limit} /><XPBar xp={quiz.data.xp_reward} /><ProgressBar current={1} total={quiz.data.questions.length} /></div>
+  <QuestionCard question={first} number={1} total={quiz.data.questions.length} explanationHref={`/explanation/${slugOf(quiz)}`} />
+  <div class="mt-6 grid gap-4 md:grid-cols-3"><AchievementPopup title="Quiz Challenger" detail="You started a boss-level MCQ mission." /><p class="comic-card bg-sunshine p-5 text-xl font-black">🪙 Coins: 120</p><p class="comic-card bg-limezap p-5 text-xl font-black">🔥 Streak Bonus: x2</p></div>
+</GameLayout>
