@@ -1,0 +1,10 @@
+---
+interface Props { title: string; subject: string; slug: string; level: number; xp: number; intro?: string; }
+const { title, subject, slug, level, xp, intro = '' } = Astro.props;
+---
+<article class="comic-card bg-white p-5">
+  <p class="sticker mb-3">Level {level} · {xp} XP</p>
+  <h3 class="text-3xl font-black">{title}</h3>
+  <p class="mt-2 text-lg font-bold">{intro}</p>
+  <a href={`/subjects/${subject}/${slug}`} class="comic-button mt-5">Open Chapter 🚪</a>
+</article>

@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+import LeaderboardCard from '../components/dashboard/LeaderboardCard.astro';
+import { leaderboard } from '../data/leaderboard';
+const boards = [
+  { label: 'Daily', rows: leaderboard.daily },
+  { label: 'Weekly', rows: leaderboard.weekly },
+  { label: 'All-time', rows: leaderboard.allTime },
+];
+---
+<DashboardLayout title="Leaderboard" kicker="Hall of Heroes">
+  <div class="grid gap-6 lg:grid-cols-3">{boards.map((board) => <section><h2 class="mb-4 text-3xl font-black">{board.label} Ranking</h2><ol class="grid gap-4">{board.rows.map((r) => <LeaderboardCard {...r} />)}</ol></section>)}</div>
+</DashboardLayout>

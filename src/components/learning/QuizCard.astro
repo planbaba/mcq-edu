@@ -1,0 +1,5 @@
+---
+interface Props { title: string; slug: string; difficulty: string; xp: number; }
+const { title, slug, difficulty, xp } = Astro.props;
+---
+<a href={`/quiz/${slug}`} class="comic-card block bg-limezap p-5"><p class="sticker mb-3">{difficulty} · +{xp} XP</p><h3 class="text-3xl font-black">{title}</h3><p class="mt-2 font-bold">Start the comic quiz battle!</p></a>

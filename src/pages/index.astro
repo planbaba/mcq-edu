@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SubjectCard from '../components/learning/SubjectCard.astro';
+import QuizCard from '../components/learning/QuizCard.astro';
+import NoteCard from '../components/learning/NoteCard.astro';
+import VideoCard from '../components/learning/VideoCard.astro';
+import StatsCard from '../components/dashboard/StatsCard.astro';
+import AchievementBadge from '../components/dashboard/AchievementBadge.astro';
+import { achievements } from '../data/achievements';
+import { progressStats } from '../data/progress';
+import { slugOf } from '../lib/utils';
+const subjects = await getCollection('subjects');
+const quizzes = await getCollection('quizzes');
+const notes = await getCollection('notes');
+const videos = await getCollection('videos');
+---
+<BaseLayout title="Home">
+  <section class="comic-card bg-sunshine p-6 md:p-10">
+    <div class="grid items-center gap-8 lg:grid-cols-[1.2fr_.8fr]">
+      <div><p class="sticker mb-4">Daily Challenge · +50 XP</p><h1 class="text-5xl font-black leading-none md:text-7xl">Learn like a comic hero!</h1><p class="mt-4 max-w-2xl text-xl font-bold">Unlock islands, beat boss quizzes, collect stars, and master school subjects with static Markdown-powered adventures.</p><a href="/quiz/fractions-basic" class="comic-button mt-6">Continue Learning ▶</a></div>
+      <div class="comic-card grid min-h-72 place-items-center bg-skybolt text-8xl" aria-label="Cartoon learner illustration">🦸‍♀️📚</div>
+    </div>
+  </section>
+  <section class="mt-10 grid gap-4 md:grid-cols-4">{progressStats.map((s) => <StatsCard {...s} />)}</section>
+  <section id="subjects" class="mt-12"><h2 class="mb-5 text-4xl font-black">Choose Your Subject Island</h2><div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">{subjects.map((s, i) => <SubjectCard {...s.data} progress={(i + 2) * 10} />)}</div></section>
+  <section class="mt-12 grid gap-6 lg:grid-cols-3"><div class="lg:col-span-1"><h2 class="mb-5 text-4xl font-black">Popular Lessons</h2><div class="grid gap-4">{quizzes.slice(0,2).map((q) => <QuizCard title={q.data.title} slug={slugOf(q)} difficulty={q.data.difficulty} xp={q.data.xp_reward} />)}</div></div><div><h2 class="mb-5 text-4xl font-black">Quick Notes</h2><div class="grid gap-4">{notes.slice(0,2).map((n) => <NoteCard title={n.data.title} slug={slugOf(n)} summary={n.data.summary} />)}</div></div><div><h2 class="mb-5 text-4xl font-black">Tutorials</h2><div class="grid gap-4">{videos.slice(0,2).map((v) => <VideoCard title={v.data.title} slug={slugOf(v)} duration={v.data.duration} />)}</div></div></section>
+  <section class="mt-12"><h2 class="mb-5 text-4xl font-black">Recent Achievements</h2><div class="grid gap-5 md:grid-cols-3">{achievements.map((a) => <AchievementBadge {...a} />)}</div></section>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import ChapterCard from '../../components/learning/ChapterCard.astro';
+import { colorClasses, iconEmoji, slugOf } from '../../lib/utils';
+export async function getStaticPaths() { const subjects = await getCollection('subjects'); return subjects.map((s) => ({ params: { subject: s.data.slug }, props: { subject: s } })); }
+const { subject } = Astro.props;
+const chapters = (await getCollection('chapters')).filter((c) => c.data.subject === subject.data.slug);
+---
+<BaseLayout title={subject.data.title}>
+  <Breadcrumbs items={[{label:'Home', href:'/'},{label:subject.data.title}]} />
+  <section class={`comic-card ${colorClasses[subject.data.color] ?? 'bg-white'} p-6 md:p-10`}><div class="flex flex-wrap items-center gap-5"><span class="text-7xl">{iconEmoji[subject.data.icon]}</span><div><h1 class="text-5xl font-black md:text-7xl">{subject.data.title}</h1><p class="mt-3 max-w-3xl text-xl font-bold">{subject.data.description}</p></div></div><div class="mt-6 grid gap-4 md:grid-cols-3"><p class="sticker">Progress 42%</p><p class="sticker">Total XP {chapters.reduce((sum,c)=>sum+c.data.xp,0)}</p><p class="sticker">Completed lessons 3/{chapters.length + 3}</p></div></section>
+  <section class="mt-10"><h2 class="mb-5 text-4xl font-black">Chapter Cards</h2><div class="grid gap-6 md:grid-cols-2">{chapters.map((c) => <ChapterCard title={c.data.title} subject={subject.data.slug} slug={slugOf(c)} level={c.data.level} xp={c.data.xp} intro={c.data.intro} />)}</div></section>
+</BaseLayout>

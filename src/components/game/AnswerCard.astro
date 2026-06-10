@@ -1,0 +1,8 @@
+---
+interface Props { choice: string | number; index: number; correct?: boolean; }
+const { choice, index, correct = false } = Astro.props;
+const letters = ['A', 'B', 'C', 'D'];
+---
+<a href="#answer-feedback" class={`flex min-h-16 items-center gap-4 rounded-3xl border-3 border-ink p-4 text-left text-xl font-black shadow-brut-sm transition hover:-translate-y-1 ${correct ? 'bg-mintpop' : 'bg-white'}`} aria-label={`Choice ${letters[index]}: ${choice}`}>
+  <span class="grid h-10 w-10 place-items-center rounded-full border-3 border-ink bg-sunshine">{letters[index]}</span>{choice}
+</a>

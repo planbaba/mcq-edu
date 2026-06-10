@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import GameLayout from '../../layouts/GameLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import { slugOf } from '../../lib/utils';
+export async function getStaticPaths() { const quizzes = await getCollection('quizzes'); return quizzes.map((q) => ({ params: { slug: slugOf(q) }, props: { quiz: q } })); }
+const { quiz } = Astro.props;
+const q = quiz.data.questions[0];
+const note = (await getCollection('notes')).find((n) => n.data.chapter === quiz.data.chapter);
+const video = (await getCollection('videos')).find((v) => v.data.chapter === quiz.data.chapter);
+---
+<GameLayout title={`${quiz.data.title} Explanation`}>
+  <Breadcrumbs items={[{label:'Home', href:'/'},{label:quiz.data.subject, href:`/subjects/${quiz.data.subject}`},{label:quiz.data.chapter, href:`/subjects/${quiz.data.subject}/${quiz.data.chapter}`},{label:'Explanation'}]} />
+  <section class="comic-card bg-mintpop p-6 md:p-10"><p class="sticker mb-3">Correct Answer</p><h1 class="text-5xl font-black">{q.answer}</h1><p class="mt-4 text-xl font-bold">{q.explanation}</p><p class="mt-5 rounded-3xl border-3 border-ink bg-sunshine p-4 text-lg font-black">Fun fact: {q.fun_fact ?? 'Every question makes your brain stronger.'}</p><div class="mt-6 flex flex-wrap gap-3">{note && <a class="comic-button" href={`/notes/${slugOf(note)}`}>Related Note</a>}{video && <a class="comic-button" href={`/videos/${slugOf(video)}`}>Related Video</a>}<a class="comic-button" href={`/quiz/${slugOf(quiz)}`}>Next Question ▶</a></div></section>
+</GameLayout>

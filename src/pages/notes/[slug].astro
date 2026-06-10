@@ -1,0 +1,13 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import { slugOf } from '../../lib/utils';
+export async function getStaticPaths() { const notes = await getCollection('notes'); return notes.map((n) => ({ params: { slug: slugOf(n) }, props: { note: n } })); }
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+<BaseLayout title={note.data.title}>
+  <Breadcrumbs items={[{label:'Home', href:'/'},{label:note.data.chapter, href:`/subjects/mathematics/${note.data.chapter}`},{label:'Notes'}]} />
+  <article class="comic-card bg-white p-6 md:p-10"><p class="sticker mb-3">Learning Notes</p><h1 class="text-5xl font-black">{note.data.title}</h1><div class="prose-comic mt-6 max-w-none"><Content /></div><div class="mt-8 flex flex-wrap gap-3"><a class="comic-button" href={`/videos/${note.data.related_video}`}>Watch Video</a><a class="comic-button" href={`/quiz/${note.data.related_quiz}`}>Try Quiz</a></div></article>
+</BaseLayout>

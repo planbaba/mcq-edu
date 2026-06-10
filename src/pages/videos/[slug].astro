@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import { slugOf, youtubeEmbed } from '../../lib/utils';
+export async function getStaticPaths() { const videos = await getCollection('videos'); return videos.map((v) => ({ params: { slug: slugOf(v) }, props: { video: v } })); }
+const { video } = Astro.props;
+const note = (await getCollection('notes')).find((n) => n.data.related_video === slugOf(video));
+const quiz = (await getCollection('quizzes')).find((q) => q.data.chapter === video.data.chapter);
+---
+<BaseLayout title={video.data.title}>
+  <Breadcrumbs items={[{label:'Home', href:'/'},{label:video.data.chapter, href:`/subjects/mathematics/${video.data.chapter}`},{label:'Video'}]} />
+  <section class="comic-card bg-bubblegum p-6 md:p-10"><p class="sticker mb-3">Tutorial · {video.data.duration}</p><h1 class="text-5xl font-black">{video.data.title}</h1><div class="mt-6 overflow-hidden rounded-[2rem] border-5 border-ink bg-ink shadow-brut"><iframe class="aspect-video w-full" src={youtubeEmbed(video.data.youtube)} title={video.data.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="mt-6 grid gap-4 md:grid-cols-2"><div class="rounded-3xl border-3 border-ink bg-white p-5"><h2 class="text-2xl font-black">Learning objectives</h2><ul class="mt-3 grid gap-2 font-bold">{video.data.objectives.map((o) => <li>✅ {o}</li>)}</ul></div><div class="rounded-3xl border-3 border-ink bg-sunshine p-5"><h2 class="text-2xl font-black">Next missions</h2><div class="mt-3 flex flex-wrap gap-3">{note && <a class="comic-button" href={`/notes/${slugOf(note)}`}>Related Notes</a>}{quiz && <a class="comic-button" href={`/quiz/${slugOf(quiz)}`}>Related Quiz</a>}</div></div></div></section>
+</BaseLayout>

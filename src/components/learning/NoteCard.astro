@@ -1,0 +1,5 @@
+---
+interface Props { title: string; slug: string; summary?: string; }
+const { title, slug, summary = 'Read the illustrated lesson notes.' } = Astro.props;
+---
+<a href={`/notes/${slug}`} class="comic-card block bg-skybolt p-5"><p class="sticker mb-3">Notes</p><h3 class="text-2xl font-black">{title}</h3><p class="mt-2 font-bold">{summary}</p></a>
